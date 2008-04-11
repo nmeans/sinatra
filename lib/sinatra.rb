@@ -145,7 +145,7 @@ module Sinatra
     attr_reader :path, :block, :param_keys, :pattern, :options
     
     def initialize(path, options = {}, &b)
-      @path = path
+      @path = URI.encode(path)
       @block = b
       @param_keys = []
       @options = options
@@ -663,6 +663,10 @@ module Sinatra
         h = Hash.new {|h,k| h[k.to_s] if Symbol === k}
         h.merge(@route_params.merge(@request.params))
       end
+    end
+
+    def data
+      @data ||= params.keys.first
     end
     
     def stop(*args)

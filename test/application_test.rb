@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/helper'
 
+require 'uri'
+
 class TesterWithEach
   def each
     yield 'foo'
@@ -134,7 +136,7 @@ context "Events in an app" do
       request.env['HTTP_USER_AGENT']
     end
     
-    get_it '/', :agent => 'Windows'
+    get_it '/', :env => { :agent => 'Windows' }
     should.be.ok
     body.should.equal 'Windows'
 
@@ -149,10 +151,23 @@ context "Events in an app" do
       params[:agent].first
     end
     
-    get_it '/', :agent => 'Windows NT'
+    get_it '/', :env => { :agent => 'Windows NT' }
 
     body.should.equal 'NT'
 
+  end
+  
+  specify "can deal with spaces in paths" do
+    
+    path = '/path with spaces'
+    
+    get path do
+      "Look ma, a path with spaces!"
+    end
+    
+    get_it URI.encode(path)
+    
+    body.should.equal "Look ma, a path with spaces!"
   end
   
 end
