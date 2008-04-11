@@ -700,6 +700,7 @@ module Sinatra
         :root => Dir.pwd,
         :views => Dir.pwd + '/views',
         :public => Dir.pwd + '/public',
+        :vendor => Dir.pwd + '/vendor',
         :sessions => false,
         :logging => true,
       }
@@ -720,6 +721,12 @@ module Sinatra
         op.on('-e env') { |env| default_options[:env] = env }
         op.on('-x') { |env| default_options[:mutex] = true }
       end.parse!(ARGV.dup.select { |o| o !~ /--name/ })
+    end
+    
+    # Called immediately after the application is initialized or reloaded to
+    # load plugins from the vendor directory.
+    def load_from_vendor!
+      
     end
 
     # Called immediately after the application is initialized or reloaded to
