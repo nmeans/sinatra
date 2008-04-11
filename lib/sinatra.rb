@@ -704,6 +704,7 @@ module Sinatra
         :root => Dir.pwd,
         :views => Dir.pwd + '/views',
         :public => Dir.pwd + '/public',
+        :vendor => Dir.pwd + '/vendor',
         :sessions => false,
         :logging => true,
       }
@@ -725,6 +726,16 @@ module Sinatra
         op.on('-x') { |env| default_options[:mutex] = true }
       end.parse!(ARGV.dup.select { |o| o !~ /--name/ })
     end
+    
+    # Called immediately after the application is initialized or reloaded to
+    # load plugins from the vendor directory.
+    def load_from_vendor!
+      files = Dir.glob(options.vendor + "/*/init.rb")
+      files.each do |file| 
+        file = File.expand_path(file)
+        load file
+      end
+    end
 
     # Called immediately after the application is initialized or reloaded to
     # register default events. Events added here have dibs on requests since
@@ -742,6 +753,7 @@ module Sinatra
       ]
       load_options!
       load_default_events!
+      load_from_vendor!
     end
 
     def define_event(method, path, options = {}, &b)
@@ -788,6 +800,7 @@ module Sinatra
       @reloading = true
       clearables.each(&:clear)
       load_default_events!
+      load_from_vendor!
       Kernel.load $0
       @reloading = false
       Environment.setup!
