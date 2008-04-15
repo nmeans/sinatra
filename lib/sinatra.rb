@@ -730,7 +730,11 @@ module Sinatra
     # Called immediately after the application is initialized or reloaded to
     # load plugins from the vendor directory.
     def load_from_vendor!
-      
+      files = Dir.glob(options.vendor + "/*/init.rb")
+      files.each do |file| 
+        file = File.expand_path(file)
+        load file
+      end
     end
 
     # Called immediately after the application is initialized or reloaded to
@@ -749,6 +753,7 @@ module Sinatra
       ]
       load_options!
       load_default_events!
+      load_from_vendor!
     end
 
     def define_event(method, path, options = {}, &b)
@@ -795,6 +800,7 @@ module Sinatra
       @reloading = true
       clearables.each(&:clear)
       load_default_events!
+      load_from_vendor!
       Kernel.load $0
       @reloading = false
       Environment.setup!
