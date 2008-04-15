@@ -90,6 +90,14 @@ All views are looked up in:
 
 == Templates
   
+=== ERB
+  
+  get '/' do
+    erb :index
+  end
+
+This will render <tt>./views/index.erb</tt>
+
 === Haml
 
   get '/' do
@@ -131,6 +139,19 @@ Send local objects like:
   end
   
 This is more ideal for rendering templates as partials from within templates
+
+=== Using Layouts
+
+To use a default layout, create a file called <tt>layout.erb</tt> or <tt>layout.haml</tt> in your <tt>./views</tt> folder (depending on which renderer
+you prefer).  Your layout file must have a call to the <tt>yield</tt> method where you want content from your template to be rendered.
+
+To override the default layout:
+
+  get '/' do
+    haml :template, :layout => :something_different
+  end
+
+This will render <tt>./views/template.haml</tt> with layout <tt>./views/something_different.haml</tt>
 
 == In file templates
 
