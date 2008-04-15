@@ -140,10 +140,10 @@ Send local objects like:
   
 This is more ideal for rendering templates as partials from within templates
 
-=== Using a Layout
+=== Using Layouts
 
-To use a default layout, create a file called <tt>layout.erb</tt> or <tt>layout.haml</tt> in your <tt>/views</tt> folder (depending on which renderer
-you wish to use).  Your layout file must have a call to the <tt>yield</tt> method where you want content from your template to be rendered.
+To use a default layout, create a file called <tt>layout.erb</tt> or <tt>layout.haml</tt> in your <tt>./views</tt> folder (depending on which renderer
+you prefer).  Your layout file must have a call to the <tt>yield</tt> method where you want content from your template to be rendered.
 
 To override the default layout:
 
